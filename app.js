@@ -18,16 +18,13 @@ app.set('view engine', 'ejs');
 
 app.set('views', path.join(__dirname, '/src/views'))
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')));
 
-const PORT = process.env.PORT || 3000;
 const MONGODB_URI = 'mongodb+srv://makykari:11112004ar@cluster0.jrgn1k2.mongodb.net/?retryWrites=true&w=majority';
 const DB_NAME = 'userDB';
 const COLLECTION_NAME = 'users';
-
 
 let db, collection;
 
@@ -37,6 +34,14 @@ app.use(session({
     saveUninitialized: true
 }));
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 8000;
+}
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
 MongoClient.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(client => {
         console.log('Connected to MongoDB');
@@ -44,12 +49,6 @@ MongoClient.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: tr
         collection = db.collection(COLLECTION_NAME);
     })
     .catch(error => console.error('Error connecting to MongoDB:', error));
-
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 
 function authorizeUser(req, res, next) {
     if (req.session && req.session.user) {
