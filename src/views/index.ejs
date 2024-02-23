@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/style/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"
+        integrity="sha512-5vwN8yor2fFT9pgPS9p9R7AszYaNn0LkQElTXIsZFCL7ucT8zDCAqlQXDdaqgA1mZP47hdvztBMsIoFxq/FyyQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#"><img src="/stock.png" alt="Stock Movement Icon" width="80" height="80" class="d-inline-block align-top"></a>
+      
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <h3>
+                    <a class="nav-link active" href="/">Home</a>
+                </h3>
+              </li>
+            </ul>
+            <h3>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <%= user.name %>
+                    </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/login">Exit</a>
+                  <a class="dropdown-item" href="/profile">Profile</a>
+                </div>
+              </li>
+            </ul>
+        </h3>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container text-center mb-5">
+        <div>
+          <h1>Stock Viewer</h1>
+          <form id='searchTickerForm' class="d-flex align-items-center justify-content-center">
+            <input type="text" id='tickerName' placeholder="Enter Ticker">
+            <button type="submit" class="rounded-pill">Show prices</button>
+          </form>
+        </div>
+      </div>
+      
+
+
+    <div class="container text-center">
+        <h1 style="margin-left: 10px; margin-right: 10px;">Try this:</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <% recommendations.forEach((recommendation, index) => { %>
+                <div class="col-2">
+                    <form id="recommendationForm_<%= recommendation._id %>" action="/recommendations" method="POST">
+                        <input type="hidden" name="stockTicker" value="<%= recommendation.stockTicker %>">
+                        <button type="submit" class="recommendationButton btn btn-dark" data-ticker="<%= recommendation.stockTicker %>">
+                            <%= recommendation.stockTicker %>
+                        </button>
+                    </form>
+                </div>
+                <% if ((index + 1) % 6 === 0) { %>
+                    </div><div class="row">
+                <% } %>
+            <% }); %>
+        </div>
+    </div>
+
+
+    <div class="chart-container">
+        <div style="display: none; transform:translateX(10%);" id = 'logo_div'>
+            <img src="#" alt="logo" id = 'logo'>
+        </div>
+        <form id="addToProfile" style="display: none;">
+            <button type="submit" class="mt-2 rounded-pill">
+                Add to profile
+            </button>
+        </form>
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+
+    <div class="container mt-5 text-center" id="description" style="display: none;">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th colspan="2">Company description</th>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <td>Ticker:</td>
+                    <td id="ticker"></td>
+                </tr>
+                <tr>
+                    <td>Exchange:</td>
+                    <td id="exchange"></td>
+                </tr>
+                <tr>
+                    <td>Sector:</td>
+                    <td id="sector"></td>
+                </tr>
+                <tr>
+                    <td>Industry:</td>
+                    <td id="industry"></td>
+                </tr>
+                <tr>
+                    <td>Currency:</td>
+                    <td id="currency"></td>
+                </tr>
+                <tr>
+                    <td>Location:</td>
+                    <td id="location"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="container mt-5">
+        <h2 class="text-center">TOP COMPANIES!</h2>
+        <h6 class="text-center"><small> *according to Aisultan* </small></h6>
+    
+        <div id="companyCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <% let isFirstItem = true; %>
+                <% companyCards.forEach((company, index) => { %>
+                    <% if (index % 3 === 0) { %>
+                        <div class="carousel-item <%= isFirstItem ? 'active' : '' %>">
+                            <div class="row">
+                    <% } %>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img src="data:image/png;base64,<%= company.photo.toString('base64') %>" class="card-img-top" alt="Company Photo">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= company.companyName %></h5>
+                                <p class="card-text"><%= company.description %></p>
+                                <p class="card-text"><small class="text-muted">Creation Date: <%= company.creationDate %></small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% if ((index + 1) % 3 === 0 || index === companyCards.length - 1) { %>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% isFirstItem = false; %>
+                <% }); %>
+            </div>
+            <a class="carousel-control-prev" href="#companyCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#companyCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+    
+
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script type="text/javascript" src="/js/historyGraph.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

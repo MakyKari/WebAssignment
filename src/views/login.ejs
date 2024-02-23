@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/style/login.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="screen">
+            <div class="screen__content">
+                <form action="/login" method="POST" class = "login">
+                    <h1>Login</h1>
+                    <div class="form-group login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <label for="username">Username:</label>
+                        <input type="text" class="login__input" id="username" name="name" placeholder="User name">
+                    </div>
+                        
+                    <div class="form-group login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="login__input" placeholder="Password">
+                    </div>
+
+                    <button class="button login__submit" type="submit">
+                        <span class="button__text">Log In Now</span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </button>	
+                    
+                    <div class="button login__submit" type="menu">
+                        <span class="button__text"><a href="/register">Register here</a></span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </div>	
+
+                </form>
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>		
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>		
+        </div>
+    </div>
+
+    <div style="margin-top: 10px; display: flex;  justify-content: center; color: white;">
+        <footer>Aisultan Tabuldin SE-2201</footer>
+    </div>
+
+</body>
+</html>
