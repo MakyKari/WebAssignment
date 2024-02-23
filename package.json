@@ -1,8 +1,8 @@
 {
-  "name": "stockpredictor",
+  "name": "stockviewer",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./app.js"
@@ -22,5 +22,9 @@
     "mongodb": "^6.3.0",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakyKari/Assignment3-Web2.git"
   }
 }
