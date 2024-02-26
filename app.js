@@ -36,7 +36,7 @@ app.use(session({
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-    port = 8000;
+    port = 3000;
 }
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
@@ -125,6 +125,11 @@ app.post('/login', async (req, res) => {
 
         if (user) {
             req.session.user = user;
+            
+            if (user.isAdmin) {
+                res.redirect('/admin');
+            }
+
             res.redirect('/');
         } else {
             res.status(401).send('Unauthorized: Invalid username or password.');
