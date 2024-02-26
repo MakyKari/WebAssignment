@@ -128,6 +128,7 @@ app.post('/login', async (req, res) => {
             
             if (user.isAdmin) {
                 res.redirect('/admin');
+                return;
             }
 
             res.redirect('/');
